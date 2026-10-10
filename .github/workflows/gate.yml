@@ -1,0 +1,15 @@
+name: gate
+on: [push, pull_request]
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: fail while fail.marker exists at head
+        run: |
+          echo "gate: checking fail.marker at $GITHUB_SHA"
+          if [ -f fail.marker ]; then
+            echo "gate: fail.marker present — failing" >&2
+            exit 1
+          fi
+          echo "gate: clean — passing"
